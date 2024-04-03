@@ -7,7 +7,7 @@ import Link from "next/link";
 export default function Home() {
   return (
     <main
-      className="flex min-h-screen relative p-24 bg-cover bg-bottom"
+      className="flex min-h-screen relative px-4 py-24 bg-cover bg-bottom"
       style={{
         backgroundImage: "url(/bgcover.jpg)",
       }}
@@ -22,7 +22,7 @@ export default function Home() {
             Please sign up to explore most of our features
           </p>
         </div>
-        <div className="grid grid-cols-2 gap-2 mt-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-4">
           <Button asChild>
             <Link href={"/signin"}>Sign In</Link>
           </Button>

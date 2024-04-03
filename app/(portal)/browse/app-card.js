@@ -14,11 +14,13 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { toast } from "@/components/ui/use-toast";
-import { BASEURL } from "@/app/config/app";
+import { BASEURL, WHATSAPPMESSAGE, WHATSAPPNUMBER } from "@/app/config/app";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 const AppCard = ({ app }) => {
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
   const { data } = useSession();
 
   const onBuy = async (price) => {
@@ -40,10 +42,31 @@ const AppCard = ({ app }) => {
 
       if (!res.ok) throw new Error("Failed to create order");
 
+      const result = await res.json();
+
       toast({
         title: "We received your buy request",
-        description: "Please wait for us to reach you shortly",
+        description: "Please wait till we redirect you through whatsapp",
       });
+
+      setTimeout(
+        () =>
+          router.push(
+            `https://api.whatsapp.com/send?phone=${WHATSAPPNUMBER}&text=${encodeURI(
+              `Hey, I am interested in purchasing your product \nOder: ${
+                result.data.orderNo
+              }\nProduct: ${
+                result.data.productName
+              }\nPlan: ${new Intl.NumberFormat("en-IN", {
+                style: "currency",
+                currency: "INR",
+              }).format(result.data.price.value)} - ${
+                result.data.price.period
+              } months`
+            )}`
+          ),
+        2000
+      );
     } catch (error) {
       toast({
         title: "Your order was successfull",

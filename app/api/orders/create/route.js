@@ -34,7 +34,7 @@ export const POST = async (request) => {
     await order.save();
 
     return NextResponse.json(
-      { message: "Order created successfully" },
+      { message: "Order created successfully", data: order },
       { status: 200 }
     );
   } catch (error) {
