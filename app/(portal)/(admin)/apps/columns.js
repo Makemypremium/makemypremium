@@ -47,8 +47,8 @@ export const columns = [
     header: "Prices",
     cell: ({ row }) => {
       const prices = row.getValue("prices") ?? [];
-      return prices.map((p) => (
-        <Button className="m-1" size="sm" variant="outline">
+      return prices.map((p, idx) => (
+        <Button key={idx} className="m-1" size="sm" variant="outline">
           {new Intl.NumberFormat("en-IN", {
             style: "currency",
             currency: "INR",
