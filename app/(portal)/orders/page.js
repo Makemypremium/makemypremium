@@ -9,6 +9,7 @@ import { columns } from "./column";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/config/auth";
 
+export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 async function getData(user) {

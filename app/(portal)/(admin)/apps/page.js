@@ -7,6 +7,7 @@ import { BASEURL } from "@/app/config/app";
 import Link from "next/link";
 import { columns } from "./columns";
 
+export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 async function getData() {

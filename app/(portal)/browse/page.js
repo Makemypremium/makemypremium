@@ -6,6 +6,7 @@ import Image from "next/image";
 import React from "react";
 import AppCard from "./app-card";
 
+export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 async function getData() {

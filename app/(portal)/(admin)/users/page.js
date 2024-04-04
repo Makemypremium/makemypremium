@@ -4,6 +4,7 @@ import React from "react";
 import { BASEURL } from "@/app/config/app";
 import { columns } from "./column";
 
+export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 async function getData(user) {

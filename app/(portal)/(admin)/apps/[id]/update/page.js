@@ -3,6 +3,7 @@ import React from "react";
 import AppForm from "../../form";
 import { BASEURL } from "@/app/config/app";
 
+export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 async function getData(id) {
