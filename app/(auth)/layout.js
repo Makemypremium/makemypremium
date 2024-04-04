@@ -21,7 +21,7 @@ const AuthLayout = async ({ children }) => {
         />
       </div>
       <div className="flex items-center justify-center py-12">
-        <div className="mx-auto grid w-[380px] gap-6">{children}</div>
+        <div className="mx-auto grid w-[380px] gap-6 px-4">{children}</div>
       </div>
     </div>
   );
