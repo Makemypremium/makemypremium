@@ -42,7 +42,7 @@ export const columns = [
   },
   {
     accessorKey: "userName",
-    header: "User Name",
+    header: "User",
   },
   {
     accessorKey: "price",

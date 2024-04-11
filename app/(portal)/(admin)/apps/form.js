@@ -16,7 +16,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
 import { useEffect, useState } from "react";
-import { Loader2 } from "lucide-react";
+import { Loader2, Trash } from "lucide-react";
 import { signIn } from "next-auth/react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { Textarea } from "@/components/ui/textarea";
@@ -25,6 +25,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { BASEURL } from "@/app/config/app";
 import { toBase64 } from "@/lib/utils";
 import Image from "next/image";
+import { EditorState } from "draft-js";
 
 const formSchema = z.object({
   name: z.string().min(3),
@@ -45,6 +46,7 @@ const AppForm = ({ type = "create", data = null }) => {
   const router = useRouter();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
+  const [editorState, setEditorState] = useState(EditorState.createEmpty());
 
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -126,7 +128,7 @@ const AppForm = ({ type = "create", data = null }) => {
                 <FormItem>
                   <FormLabel>Description</FormLabel>
                   <FormControl>
-                    <Textarea {...field} />
+                    <Textarea {...field} rows={6} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -214,33 +216,46 @@ const AppForm = ({ type = "create", data = null }) => {
 
             {prices.fields.map((price, index) => (
               <Card key={price.id} className="mb-2">
-                <CardContent className="grid grid-cols-2 gap-2 p-4">
-                  <FormField
-                    control={form.control}
-                    name={`prices.[${index}].period`}
-                    render={({ field }) => (
-                      <FormItem className="space-y-0">
-                        <FormControl>
-                          <Input
-                            type="number"
-                            placeholder="Number of months"
-                            {...field}
-                          />
-                        </FormControl>
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name={`prices.[${index}].value`}
-                    render={({ field }) => (
-                      <FormItem className="space-y-0">
-                        <FormControl>
-                          <Input type="number" placeholder="Price" {...field} />
-                        </FormControl>
-                      </FormItem>
-                    )}
-                  />
+                <CardContent className="flex items-center p-4 ">
+                  <div className="w-full grid grid-cols-2 gap-2 mr-1">
+                    <FormField
+                      control={form.control}
+                      name={`prices.[${index}].period`}
+                      render={({ field }) => (
+                        <FormItem className="space-y-0">
+                          <FormControl>
+                            <Input
+                              type="number"
+                              placeholder="Number of months"
+                              {...field}
+                            />
+                          </FormControl>
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name={`prices.[${index}].value`}
+                      render={({ field }) => (
+                        <FormItem className="space-y-0">
+                          <FormControl>
+                            <Input
+                              type="number"
+                              placeholder="Price"
+                              {...field}
+                            />
+                          </FormControl>
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  <Button
+                    onClick={() => prices.remove(index)}
+                    variant="destructive"
+                    size="icon"
+                  >
+                    <Trash className="w-4 h-4" />
+                  </Button>
                 </CardContent>
               </Card>
             ))}

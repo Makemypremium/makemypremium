@@ -1,15 +1,22 @@
 "use client";
 
-import { Card, CardContent } from "@/components/ui/card";
-import Image from "next/image";
 import React, { useState } from "react";
-import { toast } from "@/components/ui/use-toast";
-import { BASEURL, WHATSAPPNUMBER } from "@/app/config/app";
-import { useSession } from "next-auth/react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-import BuyNow from "./buy";
+import { useSession } from "next-auth/react";
+import { BASEURL } from "@/app/config/app";
+import { toast } from "@/components/ui/use-toast";
+import { Loader2, ShoppingBag } from "lucide-react";
 
-const AppCard = ({ app }) => {
+const BuyNow = ({ app }) => {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const { data } = useSession();
@@ -69,25 +76,37 @@ const AppCard = ({ app }) => {
     }
   };
 
-  return (
-    <Card
-      className="bg-cover bg-no-repeat relative cursor-pointer hover:border-gray-400 overflow-hidden"
-      style={{ backgroundImage: `url(${app.cover})` }}
-      onClick={() => router.push(`/browse/${app._id}`)}
-    >
-      <div className="bg-secondary absolute inset-0 opacity-50"></div>
-      <CardContent className="relative">
-        <div className="h-24"></div>
-        <div className="flex items-end justify-between">
-          <div className="w-16 h-16 relative rounded-md overflow-hidden shadow-md">
-            <Image src={app.logo} fill={true} />
-          </div>
-
-          <BuyNow app={app} />
-        </div>
-      </CardContent>
-    </Card>
-  );
+  return data?.user?._doc?.role === "USER" ? (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button size="sm" className="shadow-sm" disabled={loading}>
+          {loading ? (
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+          ) : (
+            <ShoppingBag className="mr-2 h-4 w-4" />
+          )}{" "}
+          Buy
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent>
+        <DropdownMenuLabel>Choose Plan</DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        {app.prices.length > 0
+          ? app.prices.map((priceModel, index) => (
+              <DropdownMenuItem onClick={() => onBuy(priceModel)} key={index}>
+                {new Intl.NumberFormat("en-IN", {
+                  style: "currency",
+                  currency: "INR",
+                }).format(priceModel.value)}
+                <span className="bg-green-700 px-2 text-sm rounded-md ml-2 text-white">
+                  {priceModel.period} months
+                </span>
+              </DropdownMenuItem>
+            ))
+          : null}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  ) : null;
 };
 
-export default AppCard;
+export default BuyNow;

@@ -3,8 +3,15 @@ import Image from "next/image";
 import logo from "@/public/logo.png";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { getServerSession } from "next-auth";
+import { authOptions } from "./config/auth";
+import { redirect } from "next/navigation";
 
-export default function Home() {
+export default async function Home() {
+  const session = await getServerSession(authOptions);
+
+  if (session) redirect("/browse");
+
   return (
     <main
       className="flex min-h-screen relative px-4 py-24 bg-cover bg-bottom"
