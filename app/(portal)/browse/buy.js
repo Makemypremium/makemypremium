@@ -12,7 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { BASEURL } from "@/app/config/app";
+import { BASEURL, WHATSAPPNUMBER } from "@/app/config/app";
 import { toast } from "@/components/ui/use-toast";
 import { Loader2, ShoppingBag } from "lucide-react";
 
@@ -47,27 +47,27 @@ const BuyNow = ({ app }) => {
         description: "Please wait till we redirect you through whatsapp",
       });
 
-      setTimeout(
-        () =>
-          router.push(
-            `https://api.whatsapp.com/send?phone=${WHATSAPPNUMBER}&text=${encodeURI(
-              `Hey, I am interested in purchasing your product \nOder: ${
-                result.data.orderNo
-              }\nProduct: ${
-                result.data.productName
-              }\nPlan: ${new Intl.NumberFormat("en-IN", {
-                style: "currency",
-                currency: "INR",
-              }).format(result.data.price.value)} - ${
-                result.data.price.period
-              } months`
-            )}`
-          ),
-        2000
-      );
+      window
+        .open(
+          `https://api.whatsapp.com/send?phone=${WHATSAPPNUMBER}&text=${encodeURI(
+            `Hey, I am interested in purchasing your product \nOder: ${
+              result.data.orderNo
+            }\nProduct: ${
+              result.data.productName
+            }\nPlan: ${new Intl.NumberFormat("en-IN", {
+              style: "currency",
+              currency: "INR",
+            }).format(result.data.price.value)} - ${
+              result.data.price.period
+            } months`
+          )}`,
+          "_blank"
+        )
+        .focus();
     } catch (error) {
+      console.log(error, 111111111);
       toast({
-        title: "Your order was successfull",
+        title: "Your order was not successfull",
         description: "Please try again later or reach us",
         variant: "destructive",
       });

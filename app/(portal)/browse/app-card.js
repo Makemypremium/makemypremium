@@ -70,23 +70,26 @@ const AppCard = ({ app }) => {
   };
 
   return (
-    <Card
-      className="bg-cover bg-no-repeat relative cursor-pointer hover:border-gray-400 overflow-hidden"
-      style={{ backgroundImage: `url(${app.cover})` }}
-      onClick={() => router.push(`/browse/${app._id}`)}
-    >
-      <div className="bg-secondary absolute inset-0 opacity-50"></div>
-      <CardContent className="relative">
-        <div className="h-24"></div>
-        <div className="flex items-end justify-between">
-          <div className="w-16 h-16 relative rounded-md overflow-hidden shadow-md">
-            <Image src={app.logo} fill={true} />
+    <div className="relative">
+      <Card
+        className="bg-cover bg-no-repeat cursor-pointer hover:border-gray-400 overflow-hidden"
+        style={{ backgroundImage: `url(${app.cover})` }}
+        onClick={() => router.push(`/browse/${app._id}`)}
+      >
+        <div className="bg-secondary absolute inset-0 opacity-50"></div>
+        <CardContent className="relative">
+          <div className="h-24"></div>
+          <div className="flex items-end justify-between relative">
+            <div className="w-16 h-16 relative rounded-md overflow-hidden shadow-md">
+              <Image src={app.logo} fill={true} />
+            </div>
           </div>
-
-          <BuyNow app={app} />
-        </div>
-      </CardContent>
-    </Card>
+        </CardContent>
+      </Card>
+      <div className="absolute bottom-6 right-6">
+        <BuyNow app={app} />
+      </div>
+    </div>
   );
 };
 
