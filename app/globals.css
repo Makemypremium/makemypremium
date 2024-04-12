@@ -77,4 +77,14 @@
   input[aria-invalid=true], textarea[aria-invalid=true] {
     @apply border-destructive
   }
+
+  .table-responsive {
+    max-width: calc(100vw - 84px);
+  }
+
+  @media(min-width: 640px) {
+    .table-responsive {
+      max-width: calc(100vw - 172px);
+    }
+  }
 }
