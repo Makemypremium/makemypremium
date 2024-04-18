@@ -8,11 +8,17 @@ import { BASEURL, WHATSAPPNUMBER } from "@/app/config/app";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import BuyNow from "./buy";
+import { toPrice } from "@/lib/utils";
 
 const AppCard = ({ app }) => {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const { data } = useSession();
+
+  const priceRange =
+    app.prices.length > 0
+      ? [app.prices[0], app.prices[app.prices.length - 1]]
+      : null;
 
   const onBuy = async (price) => {
     setLoading(true);
@@ -72,23 +78,29 @@ const AppCard = ({ app }) => {
   return (
     <div className="relative">
       <Card
-        className="bg-cover bg-no-repeat cursor-pointer hover:border-gray-400 overflow-hidden"
-        style={{ backgroundImage: `url(${app.cover})` }}
+        className="cursor-pointer hover:border-gray-400 overflow-hidden"
         onClick={() => router.push(`/browse/${app._id}`)}
       >
-        <div className="bg-secondary absolute inset-0 opacity-50"></div>
-        <CardContent className="relative">
-          <div className="h-24"></div>
-          <div className="flex items-end justify-between relative">
-            <div className="w-16 h-16 relative rounded-md overflow-hidden shadow-md">
+        <div
+          className="bg-cover bg-no-repeat relative h-20"
+          style={{ backgroundImage: `url(${app.cover})` }}
+        >
+          <div className="bg-secondary absolute inset-0 opacity-50"></div>
+        </div>
+        <CardContent className="relative -mt-14">
+          <div className="flex justify-center relative">
+            <div className="w-28 h-28 relative rounded-md overflow-hidden border-4 border-card">
               <Image src={app.logo} fill={true} />
             </div>
           </div>
+          {priceRange?.length > 0 && (
+            <span className="mt-3 mb-2 block">
+              {toPrice(priceRange[0].value)} - {toPrice(priceRange[1].value)}
+            </span>
+          )}
+          <h6 className="text-lg font-semibold leading-tight">{app.name}</h6>
         </CardContent>
       </Card>
-      <div className="absolute bottom-6 right-6">
-        <BuyNow app={app} />
-      </div>
     </div>
   );
 };

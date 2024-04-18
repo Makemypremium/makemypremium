@@ -11,6 +11,15 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Card, CardContent } from "@/components/ui/card";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
+import { toPrice } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -28,30 +37,48 @@ async function getData(id) {
 const AppPage = async ({ params }) => {
   const app = await getData(params.id);
 
-  return (
-    <div>
-      <div
-        className="hidden md:block bg-cover bg-no-repeat h-72 rounded relative"
-        style={{ backgroundImage: `url(${app.cover})` }}
-      >
-        <div className="bg-secondary absolute inset-0 opacity-50"></div>
-      </div>
+  const priceRange =
+    app.prices.length > 0
+      ? [app.prices[0], app.prices[app.prices.length - 1]]
+      : null;
 
-      <div className="px-4 md:px-8 md:-mt-16 flex items-end">
-        <div className="w-32 h-32 relative rounded-md overflow-hidden shadow-md border-4">
+  return (
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+      <div className="col-span-1 flex items-center justify-center sm:justify-start lg:justify-center py-8 lg:py-16">
+        <div className="w-40 h-40 lg:w-60 lg:h-60 relative rounded-md overflow-hidden shadow-md">
           <Image src={app.logo} fill={true} />
         </div>
-
-        <div className="ml-4 mb-3">
-          <BuyNow app={app} />
-        </div>
       </div>
 
-      <div className="px-4 md:px-8 py-4">
-        <p dangerouslySetInnerHTML={{ __html: app.description }} />
+      <div className="col-span-2 px-4 text-center md:text-left">
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink href="/">Home</BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbLink href="/components">Apps</BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>{app.name}</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
+        <h1 className="mt-6 mb-3 text-2xl md:text-4xl text-left">{app.name}</h1>
+        {priceRange?.length > 0 && (
+          <span className="mb-2 block text-xl md:text-3xl font-semibold text-muted-foreground text-left">
+            {toPrice(priceRange[0].value)} - {toPrice(priceRange[1].value)}
+          </span>
+        )}
+        <div
+          className="my-4 text-left"
+          dangerouslySetInnerHTML={{ __html: app.description }}
+        />
 
         {app.prices.length > 0 ? (
-          <Card className="my-4 max-w-full md:w-64">
+          <Card className="my-4 max-w-full md:w-80 text-left">
             <CardContent className="px-4 py-2">
               <Table>
                 <TableHeader>
@@ -80,6 +107,8 @@ const AppPage = async ({ params }) => {
             </CardContent>
           </Card>
         ) : null}
+
+        <BuyNow app={app} className="w-80 max-w-full" />
       </div>
     </div>
   );

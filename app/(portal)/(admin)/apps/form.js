@@ -25,11 +25,12 @@ import { Card, CardContent } from "@/components/ui/card";
 import { BASEURL } from "@/app/config/app";
 import { toBase64 } from "@/lib/utils";
 import Image from "next/image";
-import { EditorState } from "draft-js";
+import "react-quill/dist/quill.snow.css";
+import RichEditor from "@/components/RichEditor";
 
 const formSchema = z.object({
   name: z.string().min(3),
-  description: z.string().optional(),
+  description: z.any().optional(),
   logo: z.string(),
   cover: z.string(),
   prices: z.array(
@@ -46,7 +47,6 @@ const AppForm = ({ type = "create", data = null }) => {
   const router = useRouter();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
-  const [editorState, setEditorState] = useState(EditorState.createEmpty());
 
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -128,7 +128,11 @@ const AppForm = ({ type = "create", data = null }) => {
                 <FormItem>
                   <FormLabel>Description</FormLabel>
                   <FormControl>
-                    <Textarea {...field} rows={6} />
+                    <RichEditor
+                      theme="snow"
+                      value={field.value}
+                      onChange={field.onChange}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

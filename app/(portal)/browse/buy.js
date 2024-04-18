@@ -16,7 +16,7 @@ import { BASEURL, WHATSAPPNUMBER } from "@/app/config/app";
 import { toast } from "@/components/ui/use-toast";
 import { Loader2, ShoppingBag } from "lucide-react";
 
-const BuyNow = ({ app }) => {
+const BuyNow = ({ app, ...props }) => {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const { data } = useSession();
@@ -79,7 +79,7 @@ const BuyNow = ({ app }) => {
   return data?.user?._doc?.role === "USER" ? (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button size="sm" className="shadow-sm" disabled={loading}>
+        <Button size="lg" disabled={loading} {...props}>
           {loading ? (
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
           ) : (

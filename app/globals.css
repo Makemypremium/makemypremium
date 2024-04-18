@@ -70,6 +70,9 @@
   * {
     @apply border-border;
   }
+  ul {
+    list-style: initial;
+  }
   body {
     @apply bg-background text-foreground;
   }
