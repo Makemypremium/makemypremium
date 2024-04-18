@@ -30,6 +30,9 @@ async function getData() {
 const Apps = async () => {
   const apps = await getData();
 
+  const featuredApps = apps.filter((app) => !!app.featured);
+  const otherApps = apps.filter((app) => !app.featured);
+
   return (
     <div>
       <Breadcrumb>
@@ -43,12 +46,29 @@ const Apps = async () => {
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      <h1 className="text-3xl mt-4 mb-8">Browse Apps</h1>
-      <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 gap-2">
-        {apps.map((app) => (
-          <AppCard key={app._id} app={app} />
-        ))}
-      </div>
+      {featuredApps.length > 0 && (
+        <>
+          <h1 className="text-3xl mt-4 mb-8">Featured Apps</h1>
+          <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 gap-2">
+            {featuredApps.map((app) => (
+              <AppCard key={app._id} app={app} />
+            ))}
+          </div>
+        </>
+      )}
+
+      <hr className="mt-8" />
+
+      {otherApps.length > 0 && (
+        <>
+          <h1 className="text-xl mt-4 mb-8">Other Apps</h1>
+          <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 gap-2">
+            {otherApps.map((app) => (
+              <AppCard key={app._id} app={app} />
+            ))}
+          </div>
+        </>
+      )}
     </div>
   );
 };
